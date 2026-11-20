@@ -127,13 +127,15 @@ class GlassKeyboardView(ctx: Context, private val send: (String) -> Unit) : View
         }
         return true
     }
-    private fun fire(k: K, x: Float) = when (k.label) {
-        "⇧" -> { val n = System.currentTimeMillis(); shift = if (n - lastShiftTap < 350) 2 else if (shift == 0) 1 else 0; lastShiftTap = n }
-        "123" -> if (mode == Mode.SYMBOLS) mode = Mode.NUMBERS else mode = Mode.NUMBERS
-        "ABC" -> mode = Mode.LETTERS
-        "#+=" -> mode = Mode.SYMBOLS
-        "😀" -> mode = Mode.EMOJI
-        "◀▶" -> send(if (x < k.r.centerX()) "◀" else "▶")
-        else -> send(if (k.label.length == 1 && k.label[0].isLetter() && shift > 0) k.label.uppercase() else k.label)
-    }.let { }
+    private fun fire(k: K, x: Float) {
+        when (k.label) {
+            "⇧" -> { val n = System.currentTimeMillis(); shift = if (n - lastShiftTap < 350) 2 else if (shift == 0) 1 else 0; lastShiftTap = n }
+            "123" -> mode = Mode.NUMBERS
+            "ABC" -> mode = Mode.LETTERS
+            "#+=" -> mode = Mode.SYMBOLS
+            "😀" -> mode = Mode.EMOJI
+            "◀▶" -> send(if (x < k.r.centerX()) "◀" else "▶")
+            else -> send(if (k.label.length == 1 && k.label[0].isLetter() && shift > 0) k.label.uppercase() else k.label)
+        }
+    }
 }
